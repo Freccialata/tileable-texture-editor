@@ -19,4 +19,8 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="image.ppm" />
+  </ItemGroup>
 </Project>
