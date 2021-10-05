@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
 	test.write("new.png");
 	Image copy = test;
 
-	for (int i = 0; copy.w * copy.channels; i++) {
+	for (int i = 0; i < copy.w * copy.channels; i++) {
 		copy.data[i] = 255;
 	}
 	copy.write("copy.png");
