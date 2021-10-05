@@ -17,6 +17,10 @@
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="src\image.ppm" />
+    <None Include="src\done\main.cpp.done" />
+    <None Include="src\done\Monument.ppm" />
+    <None Include="src\done\Monument_blue.ppm" />
+    <None Include="src\done\RGBnoise.ppm" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Image.h">
@@ -36,5 +40,19 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="blank.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="copy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="new.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="test.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
