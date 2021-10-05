@@ -6,7 +6,22 @@
 
 int main(int argc, char** argv) {
 	Image test("test.jpg");
-	test.write("new.png");
+
+	return 0;
+
+	/*test.colorMask(0, 0, 1);
+
+	test.write("blue.png");*/
+
+	/*Image gray_avg = test;
+	gray_avg.grayscale_avg();
+	gray_avg.write("grayavg.png");
+
+	Image gray_lum = test;
+	gray_lum.grayscale_lum();
+	gray_lum.write("graylum.png");*/
+
+	/*test.write("new.png");
 	Image copy = test;
 
 	for (int i = 0; i < copy.w * copy.channels; i++) {
@@ -14,7 +29,5 @@ int main(int argc, char** argv) {
 	}
 	copy.write("copy.png");
 	Image blank(100, 100, 3);
-	blank.write("blank.jpg");
-
-	return 0;
+	blank.write("blank.jpg");*/
 }

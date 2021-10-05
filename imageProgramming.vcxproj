@@ -157,7 +157,10 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="blank.jpg" />
+    <Image Include="blue.png" />
     <Image Include="copy.png" />
+    <Image Include="grayavg.png" />
+    <Image Include="graylum.png" />
     <Image Include="new.png" />
     <Image Include="test.jpg" />
   </ItemGroup>

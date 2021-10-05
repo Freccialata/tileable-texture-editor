@@ -54,5 +54,14 @@
     <Image Include="test.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="grayavg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="graylum.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

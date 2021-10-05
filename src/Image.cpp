@@ -82,3 +82,57 @@ ImageType Image::getFileType(const char* filename) {
 	}
 	return PNG;
 }
+
+Image& Image::grayscale_avg()
+{
+	// (r+g+b)/3
+	if (channels < 3)
+	{
+		printf("Image %p has less than 3 channels, assuming is already grayscale", *this);
+	}
+	else
+	{
+		for (int i = 0; i < size; i+= channels)
+		{
+			int gray = (data[i], data[i + 1], data[i + 2]) / 3;
+			memset(data + i, gray, 3);
+		}
+	}
+	return *this;
+}
+
+Image& Image::grayscale_lum()
+{
+	if (channels < 3)
+	{
+		printf("Image %p has less than 3 channels, assuming is already grayscale", *this);
+	}
+	else
+	{
+		for (int i = 0; i < size; i += channels)
+		{
+			int gray = 0.2126*data[i] + 0.7152*data[i + 1] + 0.0722*data[i + 2];
+			memset(data + i, gray, 3);
+		}
+	}
+	return *this;
+}
+
+Image& Image::colorMask(float r, float g, float b)
+{
+	// TODO Check if numbers exceed the 0-1 range
+	if (channels < 3)
+	{
+		printf("\e[31m[ERROR] You need an image with three channels! Found %d", channels);
+	}
+	else
+	{
+		for (int i = 0; i < size; i+=channels)
+		{
+			data[i] *= r;
+			data[i+1] *= g;
+			data[i+2] *= b;
+		}
+	}
+	return *this;
+}
