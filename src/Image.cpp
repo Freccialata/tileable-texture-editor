@@ -106,15 +106,15 @@ Image& Image::grayscale_lum()
 {
 	if (channels < 3)
 	{
-		printf("Image %p has less than 3 channels, assuming is already grayscale", *this);
+	printf("Image %p has less than 3 channels, assuming is already grayscale", *this);
 	}
 	else
 	{
-		for (int i = 0; i < size; i += channels)
-		{
-			int gray = 0.2126*data[i] + 0.7152*data[i + 1] + 0.0722*data[i + 2];
-			memset(data + i, gray, 3);
-		}
+	for (int i = 0; i < size; i += channels)
+	{
+		int gray = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+		memset(data + i, gray, 3);
+	}
 	}
 	return *this;
 }
@@ -128,11 +128,11 @@ Image& Image::colorMask(float r, float g, float b)
 	}
 	else
 	{
-		for (int i = 0; i < size; i+=channels)
+		for (int i = 0; i < size; i += channels)
 		{
 			data[i] *= r;
-			data[i+1] *= g;
-			data[i+2] *= b;
+			data[i + 1] *= g;
+			data[i + 2] *= b;
 		}
 	}
 	return *this;
@@ -162,15 +162,15 @@ Image& Image::encodeMessage(const char* message)
 Image& Image::decodeMessage(char* buffer, size_t* messageLength)
 {
 	uint32_t len = 0;
-	for(uint8_t i = 0;i < STEG_HEADER_SIZE;++i)
+	for (uint8_t i = 0; i < STEG_HEADER_SIZE; ++i)
 	{
 		len = (len << 1) | (data[i] & 1);
 	}
 	*messageLength = len / 8;
 
-	for(uint32_t i = 0;i < len;++i)
+	for (uint32_t i = 0; i < len; ++i)
 	{
-		buffer[i/8] = (buffer[i/8] << 1) | (data[i+STEG_HEADER_SIZE] & 1);
+		buffer[i / 8] = (buffer[i / 8] << 1) | (data[i + STEG_HEADER_SIZE] & 1);
 	}
 
 
@@ -189,10 +189,45 @@ Image& Image::diffmap(Image& img)
 			for (uint8_t k = 0; k < compare_channels; ++k)
 			{
 				data[(i * w + j) * channels + k] = BYTE_BOUND(
-					abs(data[(i * w + j) * channels + k] - data[(i * img.w + j) * img.channels + k]) 
+					abs(data[(i * w + j) * channels + k] - data[(i * img.w + j) * img.channels + k])
 				);
 			}
 		}
+	}
+	return *this;
+}
+
+Image& Image::std_convolve_clamp_to_0(uint8_t channel, uint32_t ker_w, uint32_t ker_h, double ker[], uint32_t cr, uint32_t cc)
+{
+	uint8_t new_data[w * h];
+	printf("w*h=" + (w * h));
+	uint64_t center = cr * ker_w + cc;
+	for (uint64_t k = channel; k < size; k += channels)
+	{
+		double c = 0; // hold the sum
+		for (long i = -((long)cr); i < (long)ker_h - cr; ++i)
+		{
+			long row = ((long)k / channels) / w - i;
+			if (row < 0 || row > h - 1)
+			{
+				continue;
+			}
+			for (long j = -((long)cc); j < (long)ker_w - cc; ++j)
+			{
+				long col = ((long)k / channels) / w - j;
+				if (col < 0 || col > w - 1)
+				{
+					continue;
+				}
+				c += ker[center + i*(long)ker_w + j] * data[(row * w + col) * channels + channel];
+
+			}
+		}
+		new_data[k / channels] = (uint8_t)BYTE_BOUND(round(c));
+	}
+	for (uint64_t k = channel; k < size; k+=channels)
+	{
+		data[k] = new_data[k / channels];
 	}
 	return *this;
 }

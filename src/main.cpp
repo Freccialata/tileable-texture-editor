@@ -7,8 +7,26 @@
 int main(int argc, char** argv) {
 	Image test("imgs/test.jpg");
 
+	double ker[] = {
+		1 / 16.0, 2 / 16.0, 1 / 16.0,
+		2 / 16.0, 4 / 16.0, 2 / 16.0,
+		1 / 16.0, 2 / 16.0, 1 / 16.0,
+	}; // gaussian blur
+
+	test.std_convolve_clamp_to_0(0, 3, 3, ker, 1, 1);
+	test.std_convolve_clamp_to_0(1, 3, 3, ker, 1, 1);
+	test.std_convolve_clamp_to_0(2, 3, 3, ker, 1, 1);
+
+	test.write("imgs/blurred.png");
+
 	std::cin.get(); // comment on release
 	return 0;
+
+	/*
+	src\Image.cpp(202,21): error C2131: expression did not evaluate to a constant
+	src\Image.cpp(202,19): message : failure was caused by a read of a variable outside its lifetime
+	src\Image.cpp(202,19): message : see usage of 'this'
+	*/
 
 	/*Image test2("imgs/test2.jpg");
 
