@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<head>
+    <title>Simple image Editor</title>
+    <link rel="stylesheet" type="text/css" href="main-style.css"/>
+</head>
+<body>
+    <main>
+        <section class="h-title">
+            <h1>Simple image Editor</h1>
+        </section>
+
+        <section class="file-upload-section" onclick="selectimage()">
+            <input type="file" id="foto-file"/>
+            <span>Select Image</span>
+        </section>
+
+        <section class="upper-buttons-section">
+            <table class="buttons-table">
+                <tr>
+                    <td>
+                        <button class="operation-btn" onclick="crop()">Crop</button>
+                    </td>
+                    <td>
+                        <button class="operation-btn" onclick="flipVertically()">Flip</button>
+                    </td>
+                    <td>
+                        <button class="operation-btn">
+                            Rotate
+                            <input type="range" id="rotate-range" value="0" min="0" max="360" onchange="rotate(this)"/>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="img-container">
+            <img id="foto-image" class="image">
+        </section>
+
+        <section class="buttons-section">
+            <table class="buttons-table">
+                <tr>
+                    <td>
+                        <button class="operation-btn" onclick="makeGrayscale()">GrayScale</button>
+                    </td>
+                    <td>
+                        <button class="operation-btn" onclick="makeBrighter()">Brighter</button>
+                    </td>
+                    <td>
+                        <button class="operation-btn" onclick="makeDarker()">Darker</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="operation-btn" onclick="makeBlur()">Blur</button>
+                    </td>
+                    <td>
+                        <button class="operation-btn" onclick="makeEmboss()">Emboss</button>
+                    </td>
+                    <td>
+                        <button class="operation-btn" onclick="makeSharp()">Sharp</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <input type="color" class="operation-btn" id="color-picker" value="#000000" oninput="makeColorize(this)"/>
+                        <button class="operation-btn" onclick="openColorpicker()">Colorize</button>
+                    </td>
+                    <td>
+                        <input type="color" class="operation-btn" id="colorize-color-picker" value="#000000" oninput="applyColorFilter(this)"/>
+                        <button class="operation-btn" onclick="openColorFilterPicker()">Color filter</button>
+                    </td>
+                    <td>
+                        <button class="operation-btn" onclick="makeTransparent()">
+                            Transparent
+                            <div id="color-preview"></div>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"><button class="operation-btn download-btn" onclick="download()">Dowlnload</button></td>
+                </tr>
+            </table>
+        </section>
+
+    </main>
+</body>
+<script src="foto.js"></script>
+<script src="main.js"></script>
+</html>

@@ -9,85 +9,26 @@
             <h1>Tileable texture editor</h1>
             <h6>Gianluca Rubino</h6>
         </section>
-
-        <section class="file-upload-section" onclick="selectimage()">
+        <section>
             <input type="file" id="foto-file"/>
-            <span>Select Image</span>
+            <button class="action-btn" onclick="selectimage()">Select Image</button>
+            <button onclick="clearcanvas()">Clear</button>
         </section>
-
-        <section class="upper-buttons-section">
-            <table class="buttons-table">
-                <tr>
-                    <td>
-                        <button class="operation-btn" onclick="crop()">Crop</button>
-                    </td>
-                    <td>
-                        <button class="operation-btn" onclick="crop()">Flip</button>
-                    </td>
-                    <td>
-                        <button class="operation-btn" onclick="crop()">
-                            Rotate
-                            <input type="range" id="rotate-range" value="0" min="0" max="360" onchange="rotate(this)"/>
-                        </button>
-                    </td>
-                </tr>
-            </table>
+        <section id="canvas-container">
         </section>
-
-        <section class="img-container">
-            <img id="foto-image" class="image">
+        <section>
+            <button id="dwl-img-btn" onclick="downloadImg()">Download</button>
         </section>
-
-        <section class="buttons-section">
-            <table class="buttons-table">
-                <tr>
-                    <td>
-                        <button class="operation-btn" onclick="makeGrayscale()">GrayScale</button>
-                    </td>
-                    <td>
-                        <button class="operation-btn" onclick="makeBrighter()">Brighter</button>
-                    </td>
-                    <td>
-                        <button class="operation-btn" onclick="makeDarker()">Darker</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button class="operation-btn" onclick="makeBlur()">Blur</button>
-                    </td>
-                    <td>
-                        <button class="operation-btn" onclick="makeEmboss()">Emboss</button>
-                    </td>
-                    <td>
-                        <button class="operation-btn" onclick="makeSharp()">Sharp</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <input type="color" class="operation-btn" id="color-picker" value="#000000" oninput="makeColorize(this)"/>
-                        <button class="operation-btn" onclick="openColorpicker()">Colorize</button>
-                    </td>
-                    <td>
-                        <input type="color" class="operation-btn" id="color-picker" value="#000000" oninput="applyColorFilter(this)"/>
-                        <button class="operation-btn" onclick="openColorizedColorpicker()">Colorize</button>
-                    </td>
-                    <td>
-                        <button class="operation-btn" onclick="makeTransparent()">
-                            Transparent
-                            <div id="color-preview"></div>
-                        </button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td colspan="3"><button class="operation-btn download-btn" onclick="download()">Dowlnload</button></td>
-                </tr>
-            </table>
-        </section>
-
     </main>
+    <footer>
+        <nav>
+            <p>Made for the computer graphics project course</p>
+            <p>
+                More information on the <a href="https://courses.cs.ut.ee/2021/cg-pro/fall/Main/Project-TileableTextureEditor" target="_blank">wiki page</a> and <a href="https://github.com/Freccialata/tileable-texture-editor" target="_blank">GitHub page</a>
+            </p>
+            <p>The Computer Graphics and Virtual Reality Lab @ University of Tartu</p>
+        </nav>
+    </footer>
 </body>
-<script src="foto.js"></script>
 <script src="main.js"></script>
 </html>

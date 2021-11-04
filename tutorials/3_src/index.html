@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<head>
+    <title>Pixel manipulation Canvas Tutorial</title>
+    <style>
+        * {
+            font-family: 'Roboto', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        #canvas {
+            border: 1px solid;
+            width: 800px;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas">
+        Sorry, your browser does not support the canvas tag.
+    </canvas>
+
+    <script>
+        // Source: https://www.youtube.com/watch?v=TLcvlpzA-GU&list=PLkyEadCJGLm0tPLdUnRRZ3WQYH50TvzUQ&index=10
+
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+        canvas.width = canvas.scrollWidth
+        canvas.height = canvas.scrollHeight
+        const image = new Image()
+        image.src = '../1_src/TexturesCom_RockSharp0062_4_S.jpg'
+
+        image.onload = () => {
+            size_factor = 1.1
+            w = image.naturalWidth/size_factor
+            h = image.naturalHeight/size_factor
+            ctx.drawImage(image, 0,0, w, h)
+
+            let pixelData = ctx.getImageData(0,0, canvas.width, canvas.height)
+
+            for (let i=0; i<pixelData.data.length; i+=4){
+                let r = pixelData.data[i]
+                let g = pixelData.data[i+1]
+                let b = pixelData.data[i+2]
+
+                bw_p = 0.2627*r + 0.6780*g + 0.0593*b
+                //bw_p = (r+g+b)/3
+
+                pixelData.data[i] = bw_p
+                pixelData.data[i+1] = bw_p
+                pixelData.data[i+2] = bw_p
+            }
+
+            ctx.putImageData(pixelData, 0, 0)
+        }
+
+        
+    </script>
+</body>
+</html>

@@ -1,96 +1,33 @@
 * {
     padding: 0;
-    margin: 0;
+    margin: 10px 0 10px 0;
     font-family: 'Roboto', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 body{
     background-color: beige;
-}
-
-.h-title {
-    text-align: center;
-    margin-top: 60px;
-}
-
-.img-container {
-    text-align: center;
-    height: 320px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.image{
-    max-width: 100%;
-    max-height: 100%;
-}
-.file-upload-section {
-    margin: auto;
-    margin-top: 5%;
-    font-weight: bold;
-    width: 20%;
-    padding: 4px;
-    color: white;
-    text-align: center;
-    background:green;
-    cursor: pointer;
-    border-radius: 5px;
-}
-#foto-file{display: none;}
-
-.buttons-section {
-    color: white;
-    width: 50%;
-    margin-bottom: 10px;
-}
-
-.upper-buttons-section {
-    width: 50%;
-    margin: auto;
-    margin-top: 10px;
-}
-
-#rotate-range {
-    width: 60px;
-    float: right;
-}
-
-.buttons-table {
-    position: relative;
-    width: 100%;
-}
-
-.buttons-section .buttons-table {
-    margin-left: 50%;
-}
-
-.buttons-table td {
-    padding: 3px;
     text-align: center;
 }
 
-.operation-btn {
+#foto-file {
+    display: none;
+}
+
+button {
     border-radius: 5px;
     padding: 8px;
     border: 0;
-    background: #201E1E;
+    background: #494b48;
     color: white;
-    width: 100%;
     cursor: pointer;
     font-weight: bolder;
     box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.2), 0 0 1rem, rgba(0, 0, 0, 0.2);
 }
 
-.download-btn {
-    background: green;
+.action-btn {
+    background: rgb(4, 136, 4);
 }
 
-#color-picker, #colorize-color-picker {
-    display: none;
-}
-
-#color-preview {
-    float: left;
-    width: 15px;
-    height: 15px;
+footer {
+    border-top: 1px solid;
 }

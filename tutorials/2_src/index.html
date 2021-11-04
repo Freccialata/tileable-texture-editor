@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+    <title>Image Canvas Tutorial</title>
+    <style>
+        * {
+            font-family: 'Roboto', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        #canvas {
+            border: 1px solid;
+            width: 800px;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas">
+        Sorry, your browser does not support the canvas tag.
+    </canvas>
+    <table>
+        <tr>
+            <td><label for="#dimention-range">Pattern size</label></td>
+            <td>
+                <input type="range" id="dimention-range" value="8" min="2" max="20" step="0.1" oninput="setFactor(this)"/>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        // Source: https://www.youtube.com/watch?v=RbLvOiW0HvU&list=PLkyEadCJGLm0tPLdUnRRZ3WQYH50TvzUQ&index=4 | https://www.youtube.com/watch?v=DsKdZd4JfuI&list=PLkyEadCJGLm0tPLdUnRRZ3WQYH50TvzUQ&index=5
+
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+        canvas.width = canvas.scrollWidth
+        canvas.height = canvas.scrollHeight
+
+        const rock_i = new Image()
+        //rock_i.src = './RockSharp_cropped.png'
+        rock_i.src = '../1_src/TexturesCom_RockSharp0062_4_S.jpg'
+
+        function drawShapesWithPattern(dimen_factor = 4) {
+            // Create a temp canvas
+            const tempCanvas = document.createElement("canvas")
+            tempCanvas.width = rock_i.naturalWidth/dimen_factor
+            tempCanvas.height = rock_i.naturalHeight/dimen_factor
+            const tempctx = tempCanvas.getContext("2d")
+            tempctx.drawImage(rock_i, 0,0, tempCanvas.width, tempCanvas.height)
+
+            // Create a pattern object
+            const pattern = ctx.createPattern(tempCanvas, 'repeat')
+            // Set fill style
+            ctx.fillStyle = pattern
+            // Draw a rectangle
+            ctx.fillRect (10,10,400,400)
+            ctx.beginPath()
+            ctx.arc(600, 210, 100, 0, Math.PI*2)
+            ctx.fill()
+        }
+
+        function setFactor(elem) {
+            const dimen_factor = elem.value
+            ctx.clearRect(0,0,ctx.width,ctx.height)
+            drawShapesWithPattern(dimen_factor)
+        }
+
+        rock_i.onload = () => {
+            drawShapesWithPattern()
+        }
+
+        /*
+        function drawCroppedImage() {
+            const image = new Image()
+            image.src = '../1_src/TexturesCom_RockSharp0062_4_S.jpg'
+            image.onload = () => {
+                const dimen_factor = 3
+                const w = image.naturalWidth
+                const h = image.naturalHeight
+                // (image, srcx, srcx, srcw, srch, x, y, h, w)
+                ctx.drawImage(image, 0,0, w/2,h/2, 20, 20, w/dimen_factor, h/dimen_factor)
+            }
+        }
+        */
+
+        /*function drawRotatedImage(ctx, image, x, y, w, h, rot) {
+            let halfw = w/2
+            let halfh = h/2
+
+            ctx.save()
+
+            ctx.translate(x+halfw, y+halfh)
+            ctx.rotate(rot)
+            ctx.drawImage(image, -halfw, -halfh, w, h)
+
+            ctx.restore()
+        }
+
+        function draw(ctx, image) {
+            if (!image.complete) {
+                setTimeout( () => {
+                    draw(ctx, image)
+                }, 50 )
+                return
+            }
+            ctx.drawImage(image, 20, 20, 300, 160)
+            drawRotatedImage(ctx, image, 420, 20, 300, 160, 3.14/4)
+            drawRotatedImage(ctx, image, 420, 420, 300, 160, -3.14/4)
+            drawRotatedImage(ctx, image, 20, 420, 300, 160, -(2/3)*3.14)
+        }
+        draw(ctx, image)*/
+    </script>
+</body>
+</html>
