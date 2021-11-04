@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="index.css">
+    <script defer src="renderer.js"></script>
+  </head>
+  <body>
+    <main>
+      <section class="h-title">
+          <h1>Tileable texture editor</h1>
+          <h6>Gianluca Rubino</h6>
+      </section>
+      <section>
+          <input type="file" id="foto-file"/>
+          <button class="action-btn" onclick="selectimage()">Select Image</button>
+          <button onclick="clearcanvas()">Clear</button>
+      </section>
+      <section id="canvas-container">
+      </section>
+      <section>
+          <button onclick="revertToOriginalImage()">Revert</button>
+          <button onclick="makeBW()">Black and white</button>
+      </section>
+      <section>
+          <button class="action-btn" id="dwl-img-btn" onclick="downloadImg()">Download</button>
+      </section>
+    </main>
+    <footer>
+        <nav>
+            <p>Made for the computer graphics project course</p>
+            <p>
+                More information on the <a href="https://courses.cs.ut.ee/2021/cg-pro/fall/Main/Project-TileableTextureEditor" target="_blank">wiki page</a> and <a href="https://github.com/Freccialata/tileable-texture-editor" target="_blank">GitHub page</a>
+            </p>
+            <p>The Computer Graphics and Virtual Reality Lab @ University of Tartu</p>
+        </nav>
+    </footer>
+    </body>
+</html>

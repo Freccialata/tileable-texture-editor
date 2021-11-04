@@ -74,3 +74,17 @@ function downloadImg() {
 }
 
 loadimage("../imgs/TexturesCom_RockSharp0062_4_S.jpg")
+
+// TODO Fix "node integration" issue and make the require() function work
+console.log(__dirname);
+console.log(process.env);
+
+// Image processing library
+const sharp = require('sharp');
+try {
+    const metad = sharp(image).metadata();
+    console.log(metad);
+}
+catch (er) {
+    console.log(er);
+}
