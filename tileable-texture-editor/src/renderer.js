@@ -1,13 +1,17 @@
+const sharp = require('sharp');
+
 const container_canvas = document.getElementById('canvas-container');
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 
-const downlad_btn = document.getElementById('dwl-img-btn')
-const image = new Image();
+let image_path = "./histogram-tiling/patterns/TexturesCom_RockSharp0062_4_S.jpg"
 let original_pixelData = null;
+let sharp_image = null;
 
-function loadimage(imageSource) {
-    image.src = imageSource
+function loadingimage(img_path) {
+    image_path = img_path
+    const image = new Image();
+    image.src = img_path;
     image.onload = () => {
         canvas.width = image.naturalWidth;
         canvas.height = image.naturalHeight;
@@ -15,6 +19,11 @@ function loadimage(imageSource) {
         container_canvas.innerHTML = "";
         container_canvas.appendChild(canvas);
         original_pixelData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    }
+    try {
+        sharp_image = sharp(img_path);
+    } catch (er) {
+        console.log("Error loadingimage() using Sharp\n" + er);
     }
 }
 
@@ -26,7 +35,7 @@ function selectimage() {
     file_upload_elem.onchange = () => {
         reader.readAsDataURL(file_upload_elem.files[0])
         reader.onload = () => {
-            loadimage(reader.result);
+            loadingimage(reader.result);
         }
     }
 }
@@ -56,14 +65,15 @@ function makeBW() {
 
 function revertToOriginalImage() {
     ctx.putImageData(original_pixelData, 0, 0);
+    sharp_blur()
 }
 
-function downloadImg(img_name = 'edited') {
+function downloadImg(img_name = '') {
     // Download the image only if the canvas is not empty
     if (ctx.getImageData(0, 0, canvas.width, canvas.height).data
         .some(channel => channel !== 0)) {
         let link = document.createElement('a');
-        link.download = img_name + '.png';
+        link.download = img_name + '-edited.png';
         link.href = canvas.toDataURL()
         link.click();
     }
@@ -73,31 +83,34 @@ function downloadImg(img_name = 'edited') {
     }
 }
 
-function downloadImg_(img_name, img_in) {
-    let link = document.createElement('a');
-    link.download = img_name + '.png';
-    let t_img = new Image(img_in)
-    link.href = t_img.toDataURL();
-    link.click();
-}
-
-
-// TODO Figure out how to take a raw image data buffer and display it on canvas
-loadimage("../imgs/TexturesCom_RockSharp0062_4_S.jpg");
-
-const sharp = require('sharp');
-(async function () {
-    let img_path = "../imgs/TexturesCom_RockSharp0062_4_S.jpg";
+async function sharp_blur() {
+    // TODO Figure out a better way to take a raw image data buffer and display it on canvas
     try {
-        const img = await sharp(img_path);
-        img.blur(3)
-        let img_data = await img.raw().toBuffer();
-        // aa
-        loadimage(imag_url)
-        // downloadImg_('test', temp_image);
-        // console.log( info );
+        sharp_image.blur(3);
+        const working_imag_path = "./patterns/working_test.png"
+        let info = await sharp_image.png().toFile(working_imag_path);
+        console.log(info);
+        loadingimage(working_imag_path);
     }
     catch (er) {
         console.log(er);
     }
-})();
+};
+
+async function toTile() {
+    try {
+        // Some elaboration
+
+        // Temporary save for preview on the app
+        const working_imag_path = "./patterns/working_test.png"
+        let info = await sharp_image.png().toFile(working_imag_path);
+        console.log(info);
+        loadingimage("." + working_imag_path);
+    }
+    catch (er) {
+        console.log(er);
+    }
+};
+
+
+loadingimage(image_path);
