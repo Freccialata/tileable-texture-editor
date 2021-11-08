@@ -204,8 +204,3 @@ body {
 .render-help-transition {
     transition: opacity 0.2s ease-out;
 }
-
-/* MODIF */
-#scroll-speed-div {
-    display: none;
-}

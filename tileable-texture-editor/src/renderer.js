@@ -4,7 +4,7 @@ const container_canvas = document.getElementById('canvas-container');
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 
-let image_path = "./histogram-tiling/patterns/TexturesCom_RockSharp0062_4_S.jpg"
+let image_path = "./pattern-rock.png"
 let original_pixelData = null;
 let sharp_image = null;
 
@@ -65,7 +65,6 @@ function makeBW() {
 
 function revertToOriginalImage() {
     ctx.putImageData(original_pixelData, 0, 0);
-    sharp_blur()
 }
 
 function downloadImg(img_name = '') {
@@ -85,12 +84,13 @@ function downloadImg(img_name = '') {
 
 async function sharp_blur() {
     // TODO Figure out a better way to take a raw image data buffer and display it on canvas
+    // TODO fix Error: Input file is missing
     try {
         sharp_image.blur(3);
-        const working_imag_path = "./patterns/working_test.png"
+        const working_imag_path = "working_test.png"
         let info = await sharp_image.png().toFile(working_imag_path);
         console.log(info);
-        loadingimage(working_imag_path);
+        loadingimage("./" + working_imag_path);
     }
     catch (er) {
         console.log(er);
@@ -100,9 +100,10 @@ async function sharp_blur() {
 async function toTile() {
     try {
         // Some elaboration
+        // Implement histogram algorithm (check WebGL and demo code!)
 
         // Temporary save for preview on the app
-        const working_imag_path = "./patterns/working_test.png"
+        const working_imag_path = "./working_test.png"
         let info = await sharp_image.png().toFile(working_imag_path);
         console.log(info);
         loadingimage("." + working_imag_path);
