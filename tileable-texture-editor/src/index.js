@@ -11,7 +11,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 1520,
     height: 820,
-    icon: __dirname + '/tile-editor-logo.png',
+    icon: path.join(__dirname, 'tile-editor-logo.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
