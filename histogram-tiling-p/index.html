@@ -74,6 +74,9 @@
         }
 
         vec3 getTexture(vec2 pos) {
+            // NOTE get the original texture with some crushed values
+            // return YCbCrToRGB( texture2D(Pattern, pos).rgb );
+
             vec2 lattice = WorldToLattice*pos;
             vec2 cell = floor(lattice);
             vec2 uv = lattice - cell;
@@ -89,7 +92,7 @@
             vec3 color0 = sampleTile(v0, pos - LatticeToWorld*v0);
             vec3 color1 = sampleTile(v1, pos - LatticeToWorld*v1);
             vec3 color2 = sampleTile(v2, pos - LatticeToWorld*v2);
-            
+
             vec3 uvw = vec3(1.0 - uv.x - uv.y, uv.x, uv.y);
             uvw = uvw*uvw*uvw;
             uvw /= uvw.x + uvw.y + uvw.z;
@@ -103,6 +106,8 @@
         }
 
         void main() {
+            // vec2 pos = (vTexCoord-0.5);
+            // NOTE apparently this does not create a seamless tile, but it tiles based on the scale.
             vec2 pos = Offset + (vTexCoord - 0.5)*Scale;
 
             gl_FragColor = vec4(getTexture(pos), 1.0);

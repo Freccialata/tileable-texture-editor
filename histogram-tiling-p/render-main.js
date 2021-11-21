@@ -6,7 +6,22 @@ function addClass(node, className) {
         node.className += " " + className;
 }
 
+function showImageWithCanvas(imageData, w, h, parentElement, canvasId = 'my-canvas') {
+    // TEMP Show the state of the image before passing it to tgl.texture
+    let myCanvas = document.getElementById(canvasId)
+    if (!myCanvas) {
+        myCanvas = document.createElement('canvas')
+        myCanvas.id = canvasId
+    }
+    myCanvas.width = w
+    myCanvas.height = h
+    const myCtx = myCanvas.getContext('2d')
+    myCtx.putImageData(imageData, 0, 0)
+    parentElement.appendChild(myCanvas)
+    parentElement.replaceChild(myCanvas, myCanvas)
+}
+
 window.onload = () => {
-    console.log("window loaded, launching HistogramTiling()");
+    // MAIN
     const i = new HistogramTiling()
 }

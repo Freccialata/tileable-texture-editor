@@ -211,6 +211,7 @@ function truncCdfInv(x, sigma) {
 }
 
 HistogramTiling.prototype.preparePattern = function(pattern) {
+    // NOTE the image is cropped to be fitted into a (Power of two?) specific resolution
     let minSize = Math.min(pattern.naturalWidth, pattern.naturalHeight);
     let size = 1;
     while (2*size <= minSize)
@@ -221,6 +222,8 @@ HistogramTiling.prototype.preparePattern = function(pattern) {
     this.imageCanvas.height = h;
     this.imageContext.drawImage(pattern, 0, 0);
     let data = this.imageContext.getImageData(0, 0, w, h);
+    // TEMP to show the original image
+    showImageWithCanvas(data, w, h, this.content, "original-image-squared");
     
     let histo = new Uint32Array(256);
     for (let i = 0; i < 256; ++i)
@@ -272,13 +275,8 @@ HistogramTiling.prototype.preparePattern = function(pattern) {
     this.pattern = new tgl.Texture(w, h, 4, false, true, false, data.data);
     this.patternScale = 512/w;
 
-    // TODO Personal input the image
-    const myCanvas = document.createElement('canvas')
-    myCanvas.width = w
-    myCanvas.height = h
-    const myCtx = myCanvas.getContext('2d')
-    myCtx.putImageData(data, 0, 0)
-    this.content.appendChild(myCanvas)
+    // TEMP Show the state of the image before passing it to tgl.texture
+    showImageWithCanvas(data, w, h, this.content)
 }
 
 HistogramTiling.prototype.createQuadVbo = function() {
