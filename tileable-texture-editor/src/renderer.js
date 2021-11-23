@@ -12,7 +12,7 @@ class SeamlessTiling {
         try {
             this.setupGL();
         } catch (e) {
-            console.error(e.message + ". This demo won't run in your browser.");
+            console.error(e.message + ". This app won't run properly.");
             return;
         }
     }
