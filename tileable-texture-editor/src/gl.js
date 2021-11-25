@@ -1,4 +1,4 @@
-var tgl = {'init': function(gl) {
+const tgl = {'init': function(gl) {
     function glTypeSize(type) {
         switch (type) {
         case gl.BYTE:
@@ -210,3 +210,68 @@ var tgl = {'init': function(gl) {
         }
     }
 }};
+
+const MathFunc = {
+    erf(x) {
+        var a1 =  0.254829592;
+        var a2 = -0.284496736;
+        var a3 =  1.421413741;
+        var a4 = -1.453152027;
+        var a5 =  1.061405429;
+        var p  =  0.3275911;
+        
+        var sign = x < 0 ? -1 : 1;
+        x = Math.abs(x);
+        
+        var t = 1.0/(1.0 + p*x);
+        var y = 1.0 - ((((a5*t + a4)*t + a3)*t + a2)*t + a1)*t*Math.exp(-x*x);
+        
+        return sign*y;
+    },
+
+    derf(x) {
+        return 2.0/Math.sqrt(Math.PI)*Math.exp(-x*x);
+    },
+    
+    erfInv(x) {
+        var y = 0.0, err;
+        do {
+            err = this.erf(y) - x;
+            y -= err/this.derf(y);
+        } while (Math.abs(err) > 1e-8);
+        return y;
+    },
+    
+    C(sigma) {
+        return 1.0/this.erf(0.5/(sigma*Math.sqrt(2.0)));
+    },
+    
+    truncGaussian(x, sigma) {
+        return this.C(sigma)/(sigma*Math.sqrt(2*Math.PI))*Math.exp(-(x - 0.5)*(x - 0.5)/(2.0*sigma*sigma));
+    },
+
+    truncCdf(x, sigma) {
+        return 0.5*(1.0 + this.C(sigma)*erf((x - 0.5)/(sigma*Math.sqrt(2.0))));
+    },
+
+    truncCdfInv(x, sigma) {
+        return 0.5 + Math.sqrt(2)*sigma*this.erfInv((2.0*x - 1.0)/this.C(sigma));
+    }
+}
+
+const HelperFunc = {
+    showImageWithCanvas(imageData, w, h, parentElement, canvasId = 'my-canvas') {
+        // TEMP Show the state of the image before passing it to tgl.texture
+        let myCanvas = document.getElementById(canvasId);
+        if (!myCanvas) {
+            myCanvas = document.createElement('canvas');
+            myCanvas.id = canvasId;
+        }
+        myCanvas.width = w;
+        myCanvas.height = h;
+        const myCtx = myCanvas.getContext('2d');
+        myCtx.putImageData(imageData, 0, 0);
+        parentElement.appendChild(myCanvas);
+        parentElement.replaceChild(myCanvas, myCanvas);
+    }
+}
