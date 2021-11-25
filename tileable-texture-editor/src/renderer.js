@@ -14,6 +14,7 @@ class SeamlessTiling {
         try {
             this.container_canvas.appendChild(this.canvas);
             this.loadImage(this.img_name);
+            // TODO show the image before the conversion, resize it to fit in a small window
         } catch (e) {
             console.error("Error in the image processing:\n", e);
         }
