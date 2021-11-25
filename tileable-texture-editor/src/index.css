@@ -28,6 +28,22 @@ button {
   background: rgb(4, 136, 4);
 }
 
+#revert-btn, #clear-canvas-btn {
+  /*Keep hidden since there is no implementation yet*/
+  display: none;
+}
+
+#canvas-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#canvas-container canvas{
+  margin: 5px;
+}
+
 footer {
   border-top: 1px solid;
 }
