@@ -12,7 +12,6 @@ class SeamlessTiling {
             console.error(e + ". This app won't run properly. Error in setting up GL.");
         }
         try {
-            this.container_canvas.appendChild(this.canvas);
             this.loadImage(this.img_name);
             // TODO show the image before the conversion, resize it to fit in a small window
         } catch (e) {
@@ -84,8 +83,17 @@ class SeamlessTiling {
         file_upload_elem.click();
     
         file_upload_elem.onchange = () => {
-            this.img_name = file_upload_elem.files.item(0).name;
-            console.log(this.img_name);
+            try{ // Handle TypeError when no image is selected and the property .name does not exist
+                this.img_name = file_upload_elem.files.item(0).name;
+            } catch (e) {
+                if (e instanceof TypeError){
+                    console.error("No image selected, aborting...");
+                    return;
+                }
+                else {
+                    throw e;
+                }
+            }
             reader.readAsDataURL(file_upload_elem.files[0])
             reader.onload = () => {
                 this.loadImage(reader.result);
@@ -98,11 +106,29 @@ class SeamlessTiling {
             const image = new Image();
             image.src = img_path;
             image.onload = () => {
+                this.showUploadedlImage(image);
                 this.preparePattern(image);
             }
         }
         else {
             throw new Error("Image path not set or not valid: " + img_path);
+        }
+    }
+
+    showUploadedlImage(image){
+        let imageElem = document.getElementById('original-image');
+        if (imageElem){
+            this.container_canvas.removeChild(imageElem);
+        }
+        
+        imageElem = new Image(image);
+        imageElem.id = 'original-image';
+        imageElem.src = image.src;
+
+        imageElem.onload = () => {
+            imageElem.width = 200;
+            this.container_canvas.appendChild(imageElem);
+            this.container_canvas.appendChild(this.canvas);
         }
     }
 
@@ -217,7 +243,8 @@ class SeamlessTiling {
         if (this.outputcanvas || this.outputcanvas.getContext('2d').getImageData(0, 0, this.canvas.width, this.canvas.height).data
             .some(channel => channel !== 0)) {
             let link = document.createElement('a');
-            link.download = this.img_name + '-edited.png';
+            let new_name = this.img_name.substr(0,this.img_name.length-4)
+            link.download = new_name + '-edited.png';
             link.href = this.outputcanvas.toDataURL();
             link.click();
         }
