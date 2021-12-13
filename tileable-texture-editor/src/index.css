@@ -24,6 +24,15 @@ button {
   box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.2), 0 0 1rem, rgba(0, 0, 0, 0.2);
 }
 
+button:hover {
+  opacity: 80%;
+}
+
+button:active {
+  opacity: 100%;
+  transform: translateY(3px);
+}
+
 .action-btn {
   background: rgb(4, 136, 4);
 }

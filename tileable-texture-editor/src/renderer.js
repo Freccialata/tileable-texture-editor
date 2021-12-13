@@ -236,6 +236,8 @@ class SeamlessTiling {
         // Store the drawn result in a context 2d canvas in order to save it
         this.outputcanvas = document.createElement("canvas");
         this.outputcanvas.getContext('2d').drawImage(this.canvas, 0, 0);
+
+        this.showrepeatingPattern();
     }
 
     downloadImg() {
@@ -243,7 +245,7 @@ class SeamlessTiling {
         if (this.outputcanvas || this.outputcanvas.getContext('2d').getImageData(0, 0, this.canvas.width, this.canvas.height).data
             .some(channel => channel !== 0)) {
             let link = document.createElement('a');
-            let new_name = this.img_name.substr(0,this.img_name.length-4)
+            let new_name = this.img_name.substring(0,this.img_name.length-4)
             link.download = new_name + '-edited.png';
             link.href = this.outputcanvas.toDataURL();
             link.click();
@@ -252,10 +254,37 @@ class SeamlessTiling {
             throw new Error("No image to download");
         }
     }
+
+    showrepeatingPattern() {
+        const seamlessPattern = this.outputcanvas.getContext('2d').getImageData(0,0,this.outputcanvas.width,this.outputcanvas.height);
+        const repeatCanvas = document.createElement('canvas');
+        repeatCanvas.id = 'repeatCanvas';
+        const repeatCtx = repeatCanvas.getContext('2d');
+        const scale = 0.5;
+        const cols = 3;
+        const rows = 5;
+        const cellw = seamlessPattern.width * scale;
+        const cellh = seamlessPattern.height * scale;
+        const numCels = cols * rows;
+        repeatCanvas.width = cellw * cols;
+        repeatCanvas.height = cellh * rows;
+
+        for (let i = 0; i < numCels; i++) {
+            const col = i % cols;
+            const row = Math.floor(i/cols);
+
+            let x = col * cellw;
+            let y = row * cellh;
+
+            repeatCtx.putImageData(seamlessPattern, x, y, 0,0, cellw, cellh);
+        }
+        document.getElementById('canvas-preview').innerHTML = "";
+        document.getElementById('canvas-preview').appendChild(repeatCanvas);
+    }
 }
 
 
 window.onload = () => {
     // MAIN
-    const Evironment = new SeamlessTiling()
+    const Evironment = new SeamlessTiling();
 }
