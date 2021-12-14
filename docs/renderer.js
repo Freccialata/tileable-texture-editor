@@ -280,7 +280,7 @@ class SeamlessTiling {
         }
     }
 
-    showrepeatingPattern() {
+    showrepeatingPattern(offset = 0) {
         const canvasPrevDiv = document.getElementById('canvas-preview');
         let reptCanvas = document.getElementById('repeatCanvas');
         if (reptCanvas){
@@ -293,8 +293,8 @@ class SeamlessTiling {
 
         const repeatCtx = repeatCanvas.getContext('2d');
         const scale = 0.5;
-        const cols = 3;
-        const rows = 5;
+        const cols = 3 + offset;
+        const rows = 5 + offset;
         const cellw = seamlessPattern.width * scale;
         const cellh = seamlessPattern.height * scale;
         const numCels = cols * rows;
@@ -314,8 +314,32 @@ class SeamlessTiling {
     }
 }
 
+class Controls {
+    constructor() {
+        this.repeat = document.createElement('input');
+        this.repeat.setAttribute("type", "range");
+        this.repeat.defaultValue = 0;
+        this.repeat.min = 0;
+        this.repeat.max = 5;
+
+        this.showControl();
+    }
+
+    showControl() {
+        const repeatingDiv = document.getElementById('controls-preview');
+        repeatingDiv.appendChild(this.repeat);
+    }
+
+    addEvntLister(obj) {
+        this.repeat.addEventListener('change', () => {
+            obj.showrepeatingPattern( parseInt(this.repeat.value) );
+        });
+    }
+}
 
 window.onload = () => {
     // MAIN
-    const Evironment = new SeamlessTiling();
+    const evironment = new SeamlessTiling();
+    const controls = new Controls();
+    controls.addEvntLister(evironment);
 }
