@@ -1,0 +1,58 @@
+* {
+  padding: 0;
+  margin: 10px 0 10px 0;
+  font-family: 'Roboto', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+body{
+  background-color: beige;
+  text-align: center;
+}
+
+#foto-file {
+  display: none;
+}
+
+button {
+  border-radius: 5px;
+  padding: 8px;
+  border: 0;
+  background: #494b48;
+  color: white;
+  cursor: pointer;
+  font-weight: bolder;
+  box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.2), 0 0 1rem, rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  opacity: 80%;
+}
+
+button:active {
+  opacity: 100%;
+  transform: translateY(3px);
+}
+
+.action-btn {
+  background: rgb(4, 136, 4);
+}
+
+#revert-btn, #clear-canvas-btn {
+  /*Keep hidden since there is no implementation yet*/
+  display: none;
+}
+
+#canvas-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#canvas-container canvas{
+  margin: 5px;
+}
+
+footer {
+  border-top: 1px solid;
+}

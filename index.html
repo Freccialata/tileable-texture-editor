@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Tileable texture editor</title>
+    <link rel="stylesheet" href="index.css">
+
+    <script src="gl.js"></script>
+    <script src="renderer.js"></script>
+
+    <script type="x-shader/x-vertex" id="shader-vs">
+        precision highp float;
+        
+        attribute vec3 Position;
+        attribute vec2 TexCoord;
+
+        varying vec2 vTexCoord;
+
+        void main(void) {
+            gl_Position = vec4(Position, 1.0);
+            vTexCoord = TexCoord;
+        }
+    </script>
+    
+    <script type="x-shader/x-fragment" id="shader-fs">
+        precision highp float;
+        
+        uniform vec2 Offset;
+        uniform vec2 Scale;
+
+        uniform int RandRes;
+        uniform sampler2D Rand;
+        uniform sampler2D Pattern;
+        uniform sampler2D InvLUT;
+        uniform mat2 WorldToLattice;
+        uniform mat2 LatticeToWorld;
+
+        varying vec2 vTexCoord;
+
+        float sqr(float x) {
+            return x*x;
+        }
+        float softClipContrast(float x, float W) {
+            float u = x > 0.5 ? 1.0 - x : x;
+            float result;
+            if (u >= 0.5 - 0.25*W)
+                result = (u - 0.5)/W + 0.5;
+            else if (W >= 2.0/3.0)
+                result = 8.0*(1.0/W - 1.0)*sqr(u/(2.0 - W)) + (3.0 - 2.0/W)*u/(2.0 - W);
+            else if (u >= 0.5 - 0.75*W)
+                result = sqr((u - (0.5 - 0.75*W))/W);
+            else
+                result = 0.0;
+
+            if (x > 0.5)
+                result = 1.0 - result;
+
+            return result;
+        }
+
+        vec3 YCbCrToRGB(vec3 YCbCr) {
+            mat3 conv = mat3(
+                298,  298, 298,
+                  0, -100, 516,
+                408, -208,   0)/256.0;
+            
+            return conv*YCbCr + vec3(-222, 135, -276)/256.0;
+        }
+
+        vec3 sampleTile(vec2 vertex, vec2 offset) {
+            vec4 rands = texture2D(Rand, vertex/float(RandRes));
+            vec2 pos = 0.25 + rands.xy*0.5 + offset;
+            return texture2D(Pattern, pos).rgb;
+        }
+
+        vec3 getTexture(vec2 pos) {
+            // NOTE get the original texture with some crushed values
+            // return YCbCrToRGB( texture2D(Pattern, pos).rgb );
+
+            vec2 lattice = WorldToLattice*pos;
+            vec2 cell = floor(lattice);
+            vec2 uv = lattice - cell;
+            
+            vec2 v0 = cell;
+            if (uv.x + uv.y >= 1.0) {
+                v0 += 1.0;
+                uv = 1.0 - uv.yx;
+            }
+            vec2 v1 = cell + vec2(1, 0);
+            vec2 v2 = cell + vec2(0, 1);
+            
+            vec3 color0 = sampleTile(v0, pos - LatticeToWorld*v0);
+            vec3 color1 = sampleTile(v1, pos - LatticeToWorld*v1);
+            vec3 color2 = sampleTile(v2, pos - LatticeToWorld*v2);
+
+            vec3 uvw = vec3(1.0 - uv.x - uv.y, uv.x, uv.y);
+            uvw = uvw*uvw*uvw;
+            uvw /= uvw.x + uvw.y + uvw.z;
+
+            vec3 YCbCr = uvw.x*color0 + uvw.y*color1 + uvw.z*color2;
+            
+            YCbCr.x = softClipContrast(YCbCr.x, uvw.x + uvw.y + uvw.z);
+            YCbCr.x = texture2D(InvLUT, vec2(YCbCr.x, 0.5)).r;
+            
+            return YCbCrToRGB(YCbCr);
+        }
+
+        void main() {
+            // vec2 pos = (vTexCoord-0.5);
+            // NOTE apparently this does not create a seamless tile, but it tiles based on the scale.
+            vec2 pos = Offset + (vTexCoord - 0.5)*Scale;
+
+            gl_FragColor = vec4(getTexture(pos), 1.0);
+        }
+    </script>
+  </head>
+  <body>
+    <main>
+      <section class="h-title">
+          <h1>Tileable texture editor</h1>
+      </section>
+      <section>
+          <input type="file" id="foto-file"/>
+          <button class="action-btn" id="select-img-btn">Select Image</button>
+          <!--Keep disabled until there is an implementation-->
+          <button id="clear-canvas-btn" disabled>Clear</button>
+      </section>
+      <section id="canvas-container">
+      </section>
+      <section id="canvas-preview"></section>
+      <section>
+          <!--Keep disabled until there is an implementation-->
+          <button id="revert-btn" disabled>Revert</button>
+      </section>
+      <section>
+          <button class="action-btn" id="dwl-img-btn">Download</button>
+      </section>
+    </main>
+    <footer>
+        <nav>
+            <p>Made by Gianluca Rubino for the computer graphics project course</p>
+            <p>
+                More information on the <a href="https://courses.cs.ut.ee/2021/cg-pro/fall/Main/Project-TileableTextureEditor" target="_blank">wiki page</a> and <a href="https://github.com/Freccialata/tileable-texture-editor" target="_blank">GitHub page</a>
+            </p>
+            <p>The Computer Graphics and Virtual Reality Lab @ University of Tartu</p>
+        </nav>
+    </footer>
+    </body>
+</html>
