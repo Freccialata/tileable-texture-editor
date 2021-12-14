@@ -42,11 +42,15 @@ button:active {
   display: none;
 }
 
-#canvas-container {
+.flex-container {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.flex-element {
+  margin: 20px;
 }
 
 #canvas-container canvas{

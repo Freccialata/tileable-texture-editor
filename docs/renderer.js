@@ -13,7 +13,6 @@ class SeamlessTiling {
         }
         try {
             this.loadImage(this.img_name);
-            // TODO show the image before the conversion, resize it to fit in a small window
         } catch (e) {
             console.error("Error in the image processing:\n", e);
         }
@@ -116,9 +115,10 @@ class SeamlessTiling {
     }
 
     showUploadedlImage(image){
+        const imagePrevDiv = document.getElementById('image-preview');
         let imageElem = document.getElementById('original-image');
         if (imageElem){
-            this.container_canvas.removeChild(imageElem);
+            imagePrevDiv.removeChild(imageElem);
         }
         
         imageElem = new Image(image);
@@ -127,7 +127,7 @@ class SeamlessTiling {
 
         imageElem.onload = () => {
             imageElem.width = 200;
-            this.container_canvas.appendChild(imageElem);
+            imagePrevDiv.appendChild(imageElem);
             this.container_canvas.appendChild(this.canvas);
         }
     }
@@ -144,6 +144,8 @@ class SeamlessTiling {
         this.imageCanvas.height = h;
         this.imageContext.drawImage(pattern, 0, 0);
         let data = this.imageContext.getImageData(0, 0, w, h);
+
+        this.showPreparedPattern(data, w, h);
         
         let histo = new Uint32Array(256);
         for (let i = 0; i < 256; ++i)
@@ -255,10 +257,40 @@ class SeamlessTiling {
         }
     }
 
+    showPreparedPattern(imageData, w, h) {
+        const size = 200;
+        const patternPrevDiv = document.getElementById('pattern-preview');
+        let patternCanvas = document.getElementById('prepared-pattern');
+        if (patternCanvas){
+            patternPrevDiv.removeChild(patternCanvas);
+        }
+        
+        patternCanvas = document.createElement('canvas');
+        patternCanvas.width  = w;
+        patternCanvas.height = h;
+        const patternCtx = patternCanvas.getContext('2d');
+        patternCtx.putImageData(imageData,0,0);
+
+        const patternImg = new Image();
+        patternImg.id = 'prepared-pattern';
+        patternImg.src = patternCanvas.toDataURL();
+        patternImg.onload = () => {
+            patternImg.width = size;
+            patternPrevDiv.appendChild(patternImg);
+        }
+    }
+
     showrepeatingPattern() {
+        const canvasPrevDiv = document.getElementById('canvas-preview');
+        let reptCanvas = document.getElementById('repeatCanvas');
+        if (reptCanvas){
+            canvasPrevDiv.removeChild(reptCanvas);
+        }
+
         const seamlessPattern = this.outputcanvas.getContext('2d').getImageData(0,0,this.outputcanvas.width,this.outputcanvas.height);
         const repeatCanvas = document.createElement('canvas');
         repeatCanvas.id = 'repeatCanvas';
+
         const repeatCtx = repeatCanvas.getContext('2d');
         const scale = 0.5;
         const cols = 3;
@@ -278,8 +310,7 @@ class SeamlessTiling {
 
             repeatCtx.putImageData(seamlessPattern, x, y, 0,0, cellw, cellh);
         }
-        document.getElementById('canvas-preview').innerHTML = "";
-        document.getElementById('canvas-preview').appendChild(repeatCanvas);
+        canvasPrevDiv.appendChild(repeatCanvas);
     }
 }
 

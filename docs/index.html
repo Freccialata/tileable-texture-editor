@@ -125,9 +125,22 @@
           <!--Keep disabled until there is an implementation-->
           <button id="clear-canvas-btn" disabled>Clear</button>
       </section>
-      <section id="canvas-container">
+      <section>
+        <div class="flex-container">
+            <div id="image-preview" class="flex-element">
+                <h3>Original texture</h3>
+            </div>
+            <div id="pattern-preview" class="flex-element">
+                <h3>Cut texture before processing</h3>
+            </div>
+        </div>
+        <div id="canvas-container">
+            <h3>Seamless texture</h3>
+        </div>
+        <div id="canvas-preview">
+            <h3>Repeating</h3>
+        </div>
       </section>
-      <section id="canvas-preview"></section>
       <section>
           <!--Keep disabled until there is an implementation-->
           <button id="revert-btn" disabled>Revert</button>
